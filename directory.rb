@@ -23,8 +23,18 @@ def print_header
 end
 
 def print_students(students)
-  students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  puts "Search by letter or press return for full list"
+  alphabet = gets.chomp
+  if alphabet.empty?
+    students.each_with_index do |student, index|
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    end
+  elsif !alphabet.empty?
+    students.each_with_index do |student, index|
+      if student[:name][0] == alphabet.upcase
+        puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+      end
+    end
   end
 end
 

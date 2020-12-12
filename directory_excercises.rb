@@ -1,4 +1,4 @@
-def input_students(students)
+def input_students
   puts "Please enter the names and the cohorts of the students"
   puts "To finish, just hit return twice"
   # create an empty array
@@ -48,8 +48,7 @@ def print_footer(student_number)
   puts "Overall, we have #{student_number.count} great students"
 end
 
-students =[]
-input_students(students)
+students = input_students
 print_header
 print_students(students)
 print_footer(students)

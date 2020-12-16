@@ -20,6 +20,7 @@ end
 def get_name
   print "Name: "
   @name = gets
+  #replace chomp
   @name.gsub!("\r", "")
   @name.gsub!("\n", "")
   if @name.empty?
@@ -35,6 +36,7 @@ def get_cohort
   if @cohort.empty?
     @cohort = "Unknown"
   end
+  # check cohort for typos and provide default values
   until @cohort_default.include? @cohort.capitalize
     puts "Please enter a valid month"
     @cohort = gets.chomp
@@ -100,24 +102,24 @@ def print_students(students, choice)
   n = 0
   if choice.empty?
     counter = 0
-    until counter == students.count
-      if "#{students[counter][:name]}".length < 12
-        text = "#{counter + 1}. #{students[counter][:name]}, Cohort: #{students[counter][:cohort]}, Hobby: #{students[counter][:hobby]}, Food: #{students[counter][:food]}"
+    until counter == @students.count
+      if "#{@students[counter][:name]}".length < 12
+        text = "#{counter + 1}. #{@students[counter][:name]}, Cohort: #{@students[counter][:cohort]}, Hobby: #{@students[counter][:hobby]}, Food: #{students[counter][:food]}"
         puts text.center(text.length + 5)
       end
       counter += 1
     end
   elsif !choice.empty?
-    students.each_with_index do |student, index|
+    @students.each_with_index do |student, index|
       if student[:name][0] == choice.upcase
-        text = "#{index + 1}. #{student[:name]}, Cohort: #{student[:cohort]}, Hobby: #{student[:hobby]}, Food: #{student[:food]}"
+        text = "#{index + 1}. #{@student[:name]}, Cohort: #{@student[:cohort]}, Hobby: #{@student[:hobby]}, Food: #{@student[:food]}"
         puts text.center(text.length + 5)
       end
     end
   end
 end
 
-def print_cohort(students)
+def print_cohort
   sorted = []
   index = 1
   @students.each do |student|
@@ -144,11 +146,11 @@ end
 
 students = input_students
 puts "Search by initial, sort by cohort or press return for full list"
-choice = gets.chomp
+@choice = gets.chomp
 print_header
-if choice == "cohort"
-  print_cohort(students)
+if @choice == "cohort"
+  print_cohort
 else
-  print_students(students, choice)
+  print_students
 end
-print_footer(students)
+print_footer

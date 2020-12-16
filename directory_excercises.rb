@@ -23,45 +23,47 @@ def get_name
   #replace chomp
   @name.gsub!("\r", "")
   @name.gsub!("\n", "")
-  if @name.empty?
-    @name = "Student X"
-  elsif @name == "d"
-    @students = @students_default
-  end
+  empty_input_check(@name)
 end
 
 def get_cohort
   print "Cohort: "
   @cohort = gets.chomp
-  if @cohort.empty?
-    @cohort = "Unknown"
-  end
+  empty_input_check(@cohort)
   # check cohort for typos and provide default values
   until @cohort_default.include? @cohort.capitalize
     puts "Please enter a valid month"
     @cohort = gets.chomp
+    empty_input_check(@cohort)
   end
 end
 
 def get_hobby
   print "Hobby: "
   @hobby = gets.chomp
-  if @hobby.empty?
-    @hobby = "Unknown"
-  end
+  empty_input_check(@hobby)
 end
 
 def get_food
   print "Favourite food: "
   @food = gets.chomp
-  if @food.empty?
-    @food = "Unknown"
+  empty_input_check(@food)
+end
+
+
+def empty_input_check(input)
+  if input.empty?
+    input = "Unknown"
   end
+  puts input
+  return input
 end
 
 def get_student
   get_name
-  if @name != "q"
+  if @name == "d"
+    use_default
+  elsif @name != "q"
     get_cohort
     get_hobby
     get_food
@@ -78,13 +80,20 @@ def student_count
   end
 end
 
+def use_default
+  @students = @students_default
+  puts "Default list used"
+end
+
 def input_students
   intro_text
   get_student
   until @name == "q"
-    #add the student hash to the array
-    @students << {name: @name, cohort: :"#{@cohort}", hobby: @hobby, food: @food}
-    student_count
+    unless @name == "d"
+      #add the student hash to the array
+      @students << {name: @name, cohort: :"#{@cohort}", hobby: @hobby, food: @food}
+      student_count
+    end
     # get another input from the user
     get_student
   end
@@ -98,18 +107,17 @@ def print_header
   puts header_2.center(header_2.length + 5)
 end
 
-def print_students(students, choice)
-  n = 0
-  if choice.empty?
+def print_students
+  if @choice.empty?
     counter = 0
     until counter == @students.count
       if "#{@students[counter][:name]}".length < 12
-        text = "#{counter + 1}. #{@students[counter][:name]}, Cohort: #{@students[counter][:cohort]}, Hobby: #{@students[counter][:hobby]}, Food: #{students[counter][:food]}"
+        text = "#{counter + 1}. #{@students[counter][:name]}, Cohort: #{@students[counter][:cohort]}, Hobby: #{@students[counter][:hobby]}, Food: #{@students[counter][:food]}"
         puts text.center(text.length + 5)
       end
       counter += 1
     end
-  elsif !choice.empty?
+  elsif !@choice.empty?
     @students.each_with_index do |student, index|
       if student[:name][0] == choice.upcase
         text = "#{index + 1}. #{@student[:name]}, Cohort: #{@student[:cohort]}, Hobby: #{@student[:hobby]}, Food: #{@student[:food]}"

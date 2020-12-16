@@ -138,8 +138,11 @@ def print_initial
 end
 
 
+
 def print_students
-  if @choice.empty?
+  if @students.count == 0
+    puts "No students have enrolled"
+  elsif  @choice.empty?
     print_full_list
   elsif @choice == "cohort"
     print_cohort

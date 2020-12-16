@@ -20,11 +20,11 @@ end
 def get_name
   print "Name: "
   @name = gets
-  name.gsub!("\r", "")
-  name.gsub!("\n", "")
-  if name.empty?
+  @name.gsub!("\r", "")
+  @name.gsub!("\n", "")
+  if @name.empty?
     @name = "Student X"
-  elsif name == "d"
+  elsif @name == "d"
     @students = @students_default
   end
 end
@@ -32,7 +32,7 @@ end
 def get_cohort
   print "Cohort: "
   @cohort = gets.chomp
-  if cohort.empty?
+  if @cohort.empty?
     @cohort = "Unknown"
   end
   until @cohort_default.include? @cohort.capitalize
@@ -41,54 +41,51 @@ def get_cohort
   end
 end
 
+def get_hobby
+  print "Hobby: "
+  @hobby = gets.chomp
+  if @hobby.empty?
+    @hobby = "Unknown"
+  end
+end
+
+def get_food
+  print "Favourite food: "
+  @food = gets.chomp
+  if @food.empty?
+    @food = "Unknown"
+  end
+end
+
+def get_student
+  get_name
+  if @name != "q"
+    get_cohort
+    get_hobby
+    get_food
+  else
+    @name
+  end
+end
+
+def student_count
+  if @students.count == 1
+    puts "Now we have #{@students.count} student"
+  else
+    puts "Now we have #{@students.count} students"
+  end
+end
+
 def input_students
   intro_text
-  get_name
-  unless name == "q"
-    get_cohort
-    print "Hobby: "
-    hobby = gets.chomp
-    if hobby.empty?
-      hobby = "Unknown"
-    end
-    print "Food: "
-    food = gets.chomp
-    if food.empty?
-      food = "Unknown"
-    end
-  end
-  # while the name is not empty, repeat this code
-  until name == "q"
+  get_student
+  until @name == "q"
     #add the student hash to the array
-    students << {name: name, cohort: :"#{cohort}", hobby: hobby, food: food}
-    if students.count == 1
-      puts "Now we have #{students.count} student"
-    else
-      puts "Now we have #{students.count} students"
-    end
+    @students << {name: @name, cohort: :"#{@cohort}", hobby: @hobby, food: @food}
+    student_count
     # get another input from the user
-    print "Name: "
-    name = gets.chomp
-    if name.empty?
-      name = "Student X"
-    end
-    print "Cohort: "
-    cohort = gets.chomp
-    if cohort.empty?
-      cohort = "Unknown"
-    end
-    print "Hobby: "
-    hobby = gets.chomp
-    if hobby.empty?
-      hobby = "Unknown"
-    end
-    print "Food: "
-    food = gets.chomp
-    if food.empty?
-      food = "Unknown"
-    end
+    get_student
   end
-  students
 end
 
 #print list of students
@@ -123,7 +120,7 @@ end
 def print_cohort(students)
   sorted = []
   index = 1
-  students.each do |student|
+  @students.each do |student|
     cohort_sort = student[:cohort].to_s
     if !sorted.include? cohort_sort
       sorted.push(cohort_sort)
@@ -131,7 +128,7 @@ def print_cohort(students)
   end
   sorted.each do |month|
     puts "Month: " + month.upcase
-    students.each do |student|
+    @students.each do |student|
       if student[:cohort].to_s == month
       puts "#{index}. #{student[:name]}, Hobby: #{student[:hobby]}, Food: #{student[:food]}"
       index += 1
@@ -141,8 +138,8 @@ def print_cohort(students)
 end
 
 
-def print_footer(student_number)
-  puts "Overall, we have #{student_number.count} great students"
+def print_footer
+  puts "Overall, we have #{@students.count} great students"
 end
 
 students = input_students

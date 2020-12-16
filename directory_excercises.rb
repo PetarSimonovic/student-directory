@@ -23,13 +23,19 @@ def get_name
   #replace chomp
   @name.gsub!("\r", "")
   @name.gsub!("\n", "")
-  empty_input_check(@name)
+  if empty_input_check(@name) == true
+    @name = "Unknown"
+  end
+  puts @name
 end
 
 def get_cohort
   print "Cohort: "
   @cohort = gets.chomp
-  empty_input_check(@cohort)
+  if empty_input_check(@cohort) == true
+    @cohort = "Unknown"
+  end
+  puts @cohort
   # check cohort for typos and provide default values
   until @cohort_default.include? @cohort.capitalize
     puts "Please enter a valid month"
@@ -41,22 +47,26 @@ end
 def get_hobby
   print "Hobby: "
   @hobby = gets.chomp
-  empty_input_check(@hobby)
+  if empty_input_check(@hobby) == true
+    @hobby = "Unknown"
+  end
 end
 
 def get_food
   print "Favourite food: "
   @food = gets.chomp
-  empty_input_check(@food)
+  if empty_input_check(@food) == true
+    @food = "Unknown"
+  end
 end
 
 
 def empty_input_check(input)
   if input.empty?
-    input = "Unknown"
+    return true
+  else
+    return false
   end
-  puts input
-  return input
 end
 
 def get_student
@@ -74,9 +84,9 @@ end
 
 def student_count
   if @students.count == 1
-    puts "Now we have #{@students.count} student"
+    return "we have #{@students.count} student"
   else
-    puts "Now we have #{@students.count} students"
+    return "we have #{@students.count} students"
   end
 end
 
@@ -92,11 +102,12 @@ def input_students
     unless @name == "d"
       #add the student hash to the array
       @students << {name: @name, cohort: :"#{@cohort}", hobby: @hobby, food: @food}
-      student_count
+      puts "Now " + student_count
     end
     # get another input from the user
     get_student
   end
+  return @students
 end
 
 #print list of students
@@ -110,19 +121,18 @@ end
 def print_full_list
   counter = 0
   until counter == @students.count
-    ## if "#{@students[counter][:name]}".length < 12
-      text = "#{counter + 1}. #{@students[counter][:name]}, Cohort: #{@students[counter][:cohort]}, Hobby: #{@students[counter][:hobby]}, Food: #{@students[counter][:food]}"
-      puts text.center(text.length + 5)
-    ## end
-      counter += 1
+  ## if "#{@students[counter][:name]}".length < 12
+    text = "#{counter + 1}. #{@students[counter][:name]}, Cohort: #{@students[counter][:cohort]}, Hobby: #{@students[counter][:hobby]}, Food: #{@students[counter][:food]}"
+    puts text.center(text.length + 5)
+  ## end
+    counter += 1
   end
 end
 
 def print_initial
   @students.each_with_index do |student, index|
-    if student[:name][0] == choice.upcase
-      text = "#{index + 1}. #{@student[:name]}, Cohort: #{@student[:cohort]}, Hobby: #{@student[:hobby]}, Food: #{@student[:food]}"
-      puts text.center(text.length + 5)
+    if student[:name][0] == @choice.upcase
+      puts "#{index + 1}. #{student[:name]}, Cohort: #{student[:cohort]}, Hobby: #{student[:hobby]}, Food: #{student[:food]}"
     end
   end
 end
@@ -138,33 +148,35 @@ def print_students
   end
 end
 
-
-def print_cohort
-  sorted = []
-  index = 1
+def sort_cohort
+  @sorted = []
   @students.each do |student|
-    cohort_sort = student[:cohort].to_s
-    if !sorted.include? cohort_sort
-      sorted.push(cohort_sort)
+    @cohort_sort = student[:cohort].to_s
+    if !@sorted.include? @cohort_sort
+      @sorted.push(@cohort_sort)
     end
   end
-  sorted.each do |month|
+end
+
+def print_cohort
+  sort_cohort
+  @sorted.each do |month|
+    index = 1
     puts "Month: " + month.upcase
     @students.each do |student|
       if student[:cohort].to_s == month
-      puts "#{index}. #{student[:name]}, Hobby: #{student[:hobby]}, Food: #{student[:food]}"
+      puts "#{@index}. #{student[:name]}, Hobby: #{student[:hobby]}, Food: #{student[:food]}"
       index += 1
       end
     end
   end
 end
 
-
 def print_footer
-  puts "Overall, we have #{@students.count} great students"
+  puts "Overall, " + student_count
 end
 
-students = input_students
+@students = input_students
 puts "Search by initial, sort by cohort or press return for full list"
 @choice = gets.chomp
 print_header

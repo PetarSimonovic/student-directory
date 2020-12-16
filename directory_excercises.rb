@@ -107,25 +107,37 @@ def print_header
   puts header_2.center(header_2.length + 5)
 end
 
-def print_students
-  if @choice.empty?
-    counter = 0
-    until counter == @students.count
-      if "#{@students[counter][:name]}".length < 12
-        text = "#{counter + 1}. #{@students[counter][:name]}, Cohort: #{@students[counter][:cohort]}, Hobby: #{@students[counter][:hobby]}, Food: #{@students[counter][:food]}"
-        puts text.center(text.length + 5)
-      end
+def print_full_list
+  counter = 0
+  until counter == @students.count
+    ## if "#{@students[counter][:name]}".length < 12
+      text = "#{counter + 1}. #{@students[counter][:name]}, Cohort: #{@students[counter][:cohort]}, Hobby: #{@students[counter][:hobby]}, Food: #{@students[counter][:food]}"
+      puts text.center(text.length + 5)
+    ## end
       counter += 1
-    end
-  elsif !@choice.empty?
-    @students.each_with_index do |student, index|
-      if student[:name][0] == choice.upcase
-        text = "#{index + 1}. #{@student[:name]}, Cohort: #{@student[:cohort]}, Hobby: #{@student[:hobby]}, Food: #{@student[:food]}"
-        puts text.center(text.length + 5)
-      end
+  end
+end
+
+def print_initial
+  @students.each_with_index do |student, index|
+    if student[:name][0] == choice.upcase
+      text = "#{index + 1}. #{@student[:name]}, Cohort: #{@student[:cohort]}, Hobby: #{@student[:hobby]}, Food: #{@student[:food]}"
+      puts text.center(text.length + 5)
     end
   end
 end
+
+
+def print_students
+  if @choice.empty?
+    print_full_list
+  elsif @choice == "cohort"
+    print_cohort
+  else
+    print_initial
+  end
+end
+
 
 def print_cohort
   sorted = []

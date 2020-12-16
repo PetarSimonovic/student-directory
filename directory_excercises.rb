@@ -1,42 +1,61 @@
-def input_students
+@students_default = [
+  {name: "Dr Hannibal Lecter", cohort: :november, hobby: "Intellectual pontificating", food: "You"},
+  {name: "Darth Vader", cohort: :january, hobby: "Lightsaber tennis", food: "Gunk from vat"},
+  {name: "Nurse Ratched", cohort: :december, hobby: "Psychic torture",  food: "Sandwich"},
+  {name: "Michael Corleone", cohort: :november, hobby: "Scheming", food: "Revenge"},
+  {name: "Terminator", cohort: :march, hobby: "Self repair", food: "Chips"},
+  {name: "Freddy Kruger", cohort: :november, hobby: "Daydreaming", food: "Marshmallows"},
+  {name: "Count Dracula", cohort: :january, hobby: "Cricket", food: "Blood"},
+  {name: "Larry Talbot", cohort: :march, hobby: "Moon gazing", food: "Beef chow mein"},
+]
+@cohort_default = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Unknown"]
+
+@students = []
+
+def intro_text
   puts "Please enter the names and the cohorts of the students"
   puts "d: populate with defaults, q: quit"
-  # create an empty array
-  students = []
-  # get the first name
+end
+
+def get_name
   print "Name: "
-  name = gets
+  @name = gets
   name.gsub!("\r", "")
   name.gsub!("\n", "")
   if name.empty?
-    name = "Student X"
+    @name = "Student X"
   elsif name == "d"
-    students = [
-      {name: "Dr Hannibal Lecter", cohort: :november, hobby: "Intellectual pontificating", food: "You"},
-      {name: "Darth Vader", cohort: :january, hobby: "Lightsaber tennis", food: "Gunk from vat"},
-      {name: "Nurse Ratched", cohort: :december, hobby: "Psychic torture",  food: "Sandwich"},
-      {name: "Michael Corleone", cohort: :november, hobby: "Scheming", food: "Pizza"},
-      {name: "Terminator", cohort: :march, hobby: "Self repair", food: "Chips"},
-      {name: "Freddy Kruger", cohort: :november, hobby: "Daydreaming", food: "Marshmallows"},
-      {name: "Count Dracula", cohort: :january, hobby: "Cricket", food: "Blood"},
-      {name: "Larry Talbot", cohort: :march, hobby: "Moon gazing", food: "Beef chow mein"},
-    ]
-    name = "q"
+    @students = @students_default
   end
+end
+
+def get_cohort
   print "Cohort: "
-  cohort = gets.chomp
+  @cohort = gets.chomp
   if cohort.empty?
-    cohort = "Unknown"
+    @cohort = "Unknown"
   end
-  print "Hobby: "
-  hobby = gets.chomp
-  if hobby.empty?
-    hobby = "Unknown"
+  until @cohort_default.include? @cohort.capitalize
+    puts "Please enter a valid month"
+    @cohort = gets.chomp
   end
-  print "Food: "
-  food = gets.chomp
-  if food.empty?
-    food = "Unknown"
+end
+
+def input_students
+  intro_text
+  get_name
+  unless name == "q"
+    get_cohort
+    print "Hobby: "
+    hobby = gets.chomp
+    if hobby.empty?
+      hobby = "Unknown"
+    end
+    print "Food: "
+    food = gets.chomp
+    if food.empty?
+      food = "Unknown"
+    end
   end
   # while the name is not empty, repeat this code
   until name == "q"
@@ -81,11 +100,14 @@ def print_header
 end
 
 def print_students(students, choice)
-  counter = 0
+  n = 0
   if choice.empty?
+    counter = 0
     until counter == students.count
-      text = "#{counter + 1}. #{students[counter][:name]}, Cohort: #{students[counter][:cohort]}, Hobby: #{students[counter][:hobby]}, Food: #{students[counter][:food]}"
-      puts text.center(text.length + 5)
+      if "#{students[counter][:name]}".length < 12
+        text = "#{counter + 1}. #{students[counter][:name]}, Cohort: #{students[counter][:cohort]}, Hobby: #{students[counter][:hobby]}, Food: #{students[counter][:food]}"
+        puts text.center(text.length + 5)
+      end
       counter += 1
     end
   elsif !choice.empty?
